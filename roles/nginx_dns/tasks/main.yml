@@ -1,0 +1,11 @@
+#- name: Generate certs
+#  ansible.builtin.include_tasks:
+#    file: certs.yml
+#    apply:
+#      become: true
+
+- name: Configure
+  ansible.builtin.include_tasks:
+    file: setup.yml
+    apply:
+      become: true

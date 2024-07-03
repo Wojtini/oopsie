@@ -1,0 +1,6 @@
+- name: Create minecraft systemd service file
+  ansible.builtin.template:
+    src: server.properties.j2
+    dest: "{{ minecraft_server_home }}"
+  notify:
+    - restart_mc_server

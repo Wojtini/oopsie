@@ -1,0 +1,11 @@
+vagrant_cheetah ansible_port=2222
+vagrant_owl ansible_port=2200
+
+[minecraft_servers]
+vagrant_cheetah
+
+[grafana]
+vagrant_owl
+
+[nginx_dns]
+vagrant_owl

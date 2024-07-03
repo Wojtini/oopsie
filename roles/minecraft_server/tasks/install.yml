@@ -1,0 +1,24 @@
+- name: Install Java package (Ubuntu/Debian)
+  ansible.builtin.apt:
+    name: "{{ java_apt_package }}"
+    state: present
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+
+- name: Copy server files to server dir
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ minecraft_server_home }}"
+  loop:
+    - "{{ server_jar_file }}"
+    - "{{ eula_txt_file }}"
+
+- name: Create minecraft systemd service file
+  ansible.builtin.template:
+    src: templates/minecraft.service.j2
+    dest: /lib/systemd/system/minecraft.service
+
+- name: Start minecraft service
+  ansible.builtin.systemd:
+    name: minecraft
+    state: started

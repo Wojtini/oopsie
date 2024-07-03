@@ -1,0 +1,7 @@
+- name: Restart MC server
+  listen: "restart_mc_server"
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: minecraft
+    state: restarted
