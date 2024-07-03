@@ -1,0 +1,2 @@
+server_jar_file: server.jar
+java_apt_package: openjdk-21-jdk

@@ -1,5 +1,2 @@
-server_jar_file: spigot-1.21.jar
-java_apt_package: openjdk-21-jdk
-
 eula_txt_file: eula.txt
 minecraft_server_home: /home/vagrant/mc_server/
