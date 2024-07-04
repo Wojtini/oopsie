@@ -1,0 +1,17 @@
+---
+prometheus_version: 2.52.0
+prometheus_binary_local_dir: ''
+prometheus_binary_url: "https://github.com/{{ _prometheus_repo }}/releases/download/v{{ prometheus_version }}/\
+                        prometheus-{{ prometheus_version }}.linux-{{ go_arch }}.tar.gz"
+
+prometheus_config_dir: /etc/prometheus
+prometheus_db_dir: /var/lib/prometheus
+
+prometheus_storage_retention: "30d"
+
+prometheus_config_file: 'prometheus.yml.j2'
+
+prometheus_system_group: 'prometheus'
+prometheus_system_user: "{{ prometheus_system_group }}"
+
+prometheus_archive_path: /tmp
