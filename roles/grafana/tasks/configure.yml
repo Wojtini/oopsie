@@ -1,0 +1,6 @@
+- name: Configure Datasources
+  ansible.builtin.template:
+    src: datasource.yml.j2
+    dest: "{{ datasources_dir }}/datasource.yml"
+  notify:
+    - restart_grafana

@@ -1,0 +1,34 @@
+- name: Install Grafana dependencies (Ubuntu/Debian)
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - apt-transport-https
+    - software-properties-common
+    - wget
+  when: ansible_os_family == 'Debian'
+
+- name: Add an Apt signing key, uses whichever key is at the URL
+  ansible.builtin.get_url:
+    url: "https://apt.grafana.com/gpg.key"
+    dest: /usr/share/keyrings/grafana.key
+    mode: "0644"
+
+- name: Add Grafana apt repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/grafana.key] https://apt.grafana.com/ stable main"
+    state: present
+    update_cache: true
+
+- name: Install Grafana (Ubuntu/Debian)
+  ansible.builtin.apt:
+    name: grafana
+    state: present
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+
+- name: Start Grafana service
+  ansible.builtin.systemd:
+    name: grafana-server
+    state: started
