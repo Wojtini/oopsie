@@ -4,3 +4,4 @@
 
   roles:
     - role: minecraft_server
+    - role: node_exporter
