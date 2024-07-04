@@ -1,0 +1,16 @@
+[Unit]
+Description=Prometheus
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ prometheus_system_user }}
+Group={{ prometheus_system_group }}
+Restart=always
+ExecStart={{ _prometheus_binary_install_dir }}/prometheus \
+  --config.file={{ prometheus_config_dir }}/prometheus.yml \
+  --storage.tsdb.path={{ prometheus_db_dir }} \
+  --storage.tsdb.retention.time={{ prometheus_storage_retention }}
+
+[Install]
+WantedBy=multi-user.target

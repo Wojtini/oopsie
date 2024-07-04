@@ -1,0 +1,11 @@
+---
+- name: Configure prometheus
+  ansible.builtin.template:
+    src: "{{ prometheus_config_file }}"
+    dest: "{{ prometheus_config_dir }}/prometheus.yml"
+    force: true
+    owner: root
+    group: "{{ prometheus_system_group }}"
+    mode: 0640
+  notify:
+    - restart prometheus
