@@ -1,3 +1,4 @@
 .idea
 .vagrant
 roles/minecraft_server/files/server.jar
+*.jar

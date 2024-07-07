@@ -1,6 +1,16 @@
-- name: Create minecraft systemd service file
+- name: Copy configuration file (templates)
   ansible.builtin.template:
-    src: server.properties.j2
+    src: "{{ item }}"
+    dest: "{{ minecraft_server_home }}/server.properties"
+  notify:
+    - restart_mc_server
+  loop:
+    - server.properties.j2
+    - ops.json.j2
+
+- name: Copy plugins dir
+  ansible.builtin.copy:
+    src: plugins
     dest: "{{ minecraft_server_home }}"
   notify:
     - restart_mc_server
