@@ -1,8 +1,3 @@
-- name: Ensure nginx is installed
-  ansible.builtin.package:
-    name: nginx
-    state: present
-
 - name: Copy nginx config file
   ansible.builtin.template:
     src: nginx.conf.j2

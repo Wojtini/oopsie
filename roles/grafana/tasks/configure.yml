@@ -4,3 +4,9 @@
     dest: "{{ datasources_dir }}/datasource.yml"
   notify:
     - restart_grafana
+
+- name: Set grafana domain
+  lineinfile:
+    dest: "{{ config_dir }}/grafana.ini"
+    regexp: ";domain = localhost"
+    line: ";domain = {{ domain_name }}"

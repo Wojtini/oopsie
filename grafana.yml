@@ -5,3 +5,10 @@
   roles:
     - role: grafana
     - role: prometheus
+
+
+- name: Deploy exporter nodes
+  hosts: minecraft_servers
+
+  roles:
+    - role: node_exporter

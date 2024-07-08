@@ -5,7 +5,7 @@
 
 - name: Create letsencrypt directory
   ansible.builtin.file:
-    name: /var/www/letsencrypt
+    name: "{{ letsencrypt_dir }}"
     state: directory
 
 - name: Install nginx site for letsencrypt requests
@@ -20,11 +20,11 @@
     state: link
 
 - name: Reload nginx to activate letsencrypt site
-  service:
+  ansible.builtin.service:
     name: nginx
     state: restarted
 
 - name: Create letsencrypt certificate
-  shell: letsencrypt certonly -n --webroot -w /var/www/letsencrypt -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
+  ansible.builtin.shell: letsencrypt certonly -n --test-cert --webroot -w {{ letsencrypt_dir }} -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
   args:
     creates: /etc/letsencrypt/live/{{ domain_name }}

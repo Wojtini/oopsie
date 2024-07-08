@@ -19,7 +19,11 @@ scrape_configs:
   static_configs:
     - targets:
       - localhost:9090
-- job_name: node
+- job_name: mc_hardware
   static_configs:
     - targets:
       - '{{ domain_name }}:9100'
+- job_name: mc_stats
+  static_configs:
+    - targets:
+      - '{{ domain_name }}:9940'
