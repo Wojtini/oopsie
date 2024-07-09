@@ -6,3 +6,10 @@
     - role: minecraft_server
       vars:
         server_jar_file: spigot-1.21.jar
+      server_settings:
+        motd: "Miłe Pogawędki on 50th floor"
+        white-list: true
+        difficulty: hard
+        simulation-distance: 25
+        view-distance: 32
+        enable-rcon: false
