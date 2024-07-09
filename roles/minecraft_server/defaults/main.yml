@@ -1,3 +1,11 @@
 server_jar_file: server.jar
 java_apt_package: openjdk-21-jdk
+
 minecraft_server_home: /home/vagrant/mc_server/
+server_settings:
+  motd: "Miłe Pogawędki on 50th floor"
+  white-list: true
+  difficulty: hard
+  simulation-distance: 25
+  view-distance: 32
+  enable-rcon: false

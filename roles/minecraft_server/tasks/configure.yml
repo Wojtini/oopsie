@@ -1,13 +1,27 @@
-- name: Copy server configuration files templates
+- name: Copy ops template
   ansible.builtin.template:
-    src: "{{ item.src }}"
-    dest: "{{ minecraft_server_home }}/{{ item.dest }}"
+    src: "ops.json.j2"
+    dest: "{{ minecraft_server_home }}/ops.json"
+
+- name: Copy server configuration file
+  ansible.builtin.copy:
+    src: "server.properties"
+    dest: "{{ minecraft_server_home }}/"
+    force: false
+
+- name: Configure server.properties
+  server_properties:
+    file: "{{ minecraft_server_home }}/server.properties"
+    server_settings: "{{ server_settings }}"
   notify:
     - restart_mc_server
-  loop:
-    - { "src": "server.properties.j2", "dest": "server.properties" }
-    - { "src": "ops.json.j2", "dest": "ops.json" }
+  register: result
 
+- name: Show updated server.properties
+  ansible.builtin.debug:
+    msg: "{{ result }}"
+  when: result.changed
+#  failed_when: true
 
 - name: Copy plugins dir
   ansible.builtin.copy:
