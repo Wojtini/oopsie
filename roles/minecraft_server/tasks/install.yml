@@ -9,9 +9,16 @@
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ minecraft_server_home }}"
+    mode: '0644'
   loop:
     - "{{ server_jar_file }}"
     - "{{ eula_txt_file }}"
+
+- name: Copy entrypoint.sh
+  ansible.builtin.copy:
+    src: entrypoint.sh
+    dest: "{{ minecraft_server_home }}"
+    mode: '0744'
 
 - name: Create minecraft systemd service file
   ansible.builtin.template:
