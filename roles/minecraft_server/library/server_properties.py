@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from typing import Tuple, Union, List, Any
+from typing import Tuple, List, Any
 
 from ansible.module_utils.basic import AnsibleModule
 from pathlib import Path
@@ -87,7 +87,7 @@ def main() -> None:
     server_settings = module.params["server_settings"]
 
     sp = ServerProperties(file)
-    module.exit_json(changed=sp.changed, message=f"{sp.settings_map}")
+
     for key, new_value in server_settings.items():
         sp[key] = new_value
 

@@ -21,7 +21,6 @@
   ansible.builtin.debug:
     msg: "{{ result }}"
   when: result.changed
-#  failed_when: true
 
 - name: Copy plugins dir
   ansible.builtin.copy:

@@ -30,3 +30,4 @@
   ansible.builtin.systemd:
     name: minecraft
     state: started
+    enabled: true

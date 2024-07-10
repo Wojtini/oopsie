@@ -13,3 +13,4 @@
           simulation-distance: 25
           view-distance: 32
           enable-rcon: false
+          max-players: 10
