@@ -14,9 +14,9 @@
     - "{{ server_jar_file }}"
     - "{{ eula_txt_file }}"
 
-- name: Copy entrypoint.sh
-  ansible.builtin.copy:
-    src: entrypoint.sh
+- name: Copy entrypoint.sh.j2
+  ansible.builtin.template:
+    src: entrypoint.sh.j2
     dest: "{{ minecraft_server_home }}"
     mode: '0744'
 
@@ -24,6 +24,7 @@
   ansible.builtin.template:
     src: templates/minecraft.service.j2
     dest: /lib/systemd/system/minecraft.service
+    mode: '0644'
 
 - name: Start minecraft service
   ansible.builtin.systemd:
