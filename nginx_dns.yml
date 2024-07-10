@@ -1,6 +1,0 @@
-#!/usr/bin/env ansible-playbook
-- name: Deploy nginx dns
-  hosts: nginx_dns
-
-  roles:
-    - role: nginx_dns

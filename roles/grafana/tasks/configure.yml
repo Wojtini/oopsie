@@ -8,5 +8,5 @@
 - name: Set grafana domain
   lineinfile:
     dest: "{{ config_dir }}/grafana.ini"
-    regexp: ";domain = localhost"
-    line: ";domain = {{ domain_name }}"
+    regexp: ";domain ="
+    line: ";domain = {{ grafana_domain }}"

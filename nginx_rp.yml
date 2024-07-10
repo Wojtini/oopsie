@@ -1,0 +1,9 @@
+#!/usr/bin/env ansible-playbook
+- name: Deploy nginx dns
+  hosts: nginx_rp
+
+  roles:
+    - role: nginx_rp
+      vars:
+        letsencrypt_email: wmaziarzw@gmail.com
+        domain_name: grafana.50thfloor.xyz

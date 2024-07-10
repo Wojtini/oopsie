@@ -7,5 +7,5 @@ vagrant_cheetah
 [grafana]
 vagrant_owl
 
-[nginx_dns]
+[nginx_rp]
 vagrant_owl

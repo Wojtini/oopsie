@@ -4,6 +4,8 @@
 
   roles:
     - role: grafana
+      vars:
+        domain_name: grafana.50thfloor.xyz
     - role: prometheus
 
 
