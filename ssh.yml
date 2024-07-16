@@ -1,0 +1,9 @@
+#!/usr/bin/env ansible-playbook
+- name: Add public ssh keys for remote access
+  hosts: all
+
+  roles:
+    - role: remote_access
+      vars:
+        ssh_keys:
+          - /home/wojtini/.ssh/id_rsa.pub

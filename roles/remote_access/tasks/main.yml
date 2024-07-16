@@ -1,0 +1,7 @@
+- name: Copy public keys
+  become: true
+  ansible.posix.authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', '{{ item }}') }}"
+  loop: "{{ ssh_keys }}"
