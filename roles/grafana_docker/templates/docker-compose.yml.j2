@@ -1,0 +1,11 @@
+services:
+  grafana:
+    image: grafana/grafana-enterprise:11.1.0-boringcrypto
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "{{ grafana_port }}:{{ grafana_port }}"
+    volumes:
+      - storage:{{ grafana_storage_dir }}
+volumes:
+  storage: {}

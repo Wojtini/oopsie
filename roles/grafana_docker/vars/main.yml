@@ -1,0 +1,3 @@
+docker_volumes_dir: /var/lib/docker/volumes/
+
+grafana_storage_dir: /var/lib/grafana
