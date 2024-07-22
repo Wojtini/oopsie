@@ -1,2 +1,4 @@
 letsencrypt_email: name@mail.com
 domain_name: domain.xyz
+
+grafana_upstream: localhost:3000

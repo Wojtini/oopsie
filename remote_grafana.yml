@@ -4,6 +4,7 @@
 
   roles:
     - role: grafana_docker
+    - role: prometheus
 #      vars:
 #        config_backup_tar: "/home/wojtini/remote_backups/grafana_config_backup.tar_2024_07_22_12-24-03.tar"
 #        storage_backup_tar: "/home/wojtini/remote_backups/grafana_storage_backup.tar_2024_07_22_12-24-02.tar"
