@@ -14,3 +14,4 @@
           view-distance: 32
           enable-rcon: false
           max-players: 10
+    - role: node_exporter
