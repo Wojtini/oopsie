@@ -1,3 +1,15 @@
-docker_volumes_dir: /var/lib/docker/volumes/
-
 grafana_storage_dir: /var/lib/grafana
+grafana_config_dir: /etc/grafana
+
+docker_volumes_dir: /var/lib/docker/volumes
+grafana_volumes_dir: "{{ docker_volumes_dir }}/grafana_storage"
+grafana_data_volumes_dir: "{{ grafana_volumes_dir }}/_data"
+
+grafana_config_host_dir: "{{ docker_volumes_dir }}/grafana_config"
+grafana_config_host_data_dir: "{{ grafana_config_host_dir }}/_data"
+grafana_datasources_dir: "{{ grafana_config_host_data_dir }}/provisioning/datasources"
+
+
+backups:
+  - { dir: "{{ grafana_data_volumes_dir }}", name: "grafana_storage_backup.tar" }
+  - { dir: "{{ grafana_config_host_data_dir }}", name: "grafana_config_backup.tar" }

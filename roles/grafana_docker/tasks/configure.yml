@@ -1,0 +1,28 @@
+- name: Ensure service is stopped
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_location }}"
+    state: stopped
+  tags:
+    - configure
+
+- name: Configure Datasources
+  ansible.builtin.template:
+    src: datasource.yml.j2
+    dest: "{{ grafana_datasources_dir }}/datasource.yml"
+  tags:
+    - configure
+
+- name: Set grafana domain
+  lineinfile:
+    dest: "{{ grafana_config_host_data_dir }}/grafana.ini"
+    regexp: ";domain ="
+    line: ";domain = {{ grafana_domain }}"
+  tags:
+    - configure
+
+- name: Ensure service is restarted
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_location }}"
+    state: present
+  tags:
+    - configure

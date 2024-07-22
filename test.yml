@@ -1,6 +1,0 @@
-#!/usr/bin/env ansible-playbook
-- name: Deploy grafana
-  hosts: wro_cat
-
-  roles:
-    - role: grafana_docker

@@ -1,16 +1,33 @@
-- name: Ensures {{ compose_location }} dir exists
-  become: true
-  ansible.builtin.file:
-    path: "{{ compose_location }}"
-    state: directory
+- name: Install
+  ansible.builtin.include_tasks:
+    file: install.yml
+    apply:
+      become: true
+  tags:
+    - install
 
-- name: Copy docker compose
-  become: true
-  ansible.builtin.template:
-    src: docker-compose.yml.j2
-    dest: "{{ compose_location }}/docker-compose.yml"
+- name: Configure
+  ansible.builtin.include_tasks:
+    file: configure.yml
+    apply:
+      become: true
+  tags:
+    - configure
 
-- name: Create and start services
-  become: true
-  community.docker.docker_compose_v2:
-    project_src: "{{ compose_location }}"
+- name: Backup
+  ansible.builtin.include_tasks:
+    file: backup.yml
+    apply:
+      become: true
+  tags:
+    - backup
+
+- name: Restore
+  ansible.builtin.include_tasks:
+    file: restore.yml
+    apply:
+      become: true
+  tags:
+    - restore
+    - never
+

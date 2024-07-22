@@ -7,5 +7,7 @@ services:
       - "{{ grafana_port }}:{{ grafana_port }}"
     volumes:
       - storage:{{ grafana_storage_dir }}
+      - config:{{ grafana_config_dir }}
 volumes:
   storage: {}
+  config: {}

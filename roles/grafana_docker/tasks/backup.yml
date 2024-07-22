@@ -1,0 +1,30 @@
+- name: Ensure service is stopped
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_location }}"
+    state: stopped
+  tags:
+    - backup
+
+- name: Create TAR backup
+  community.general.archive:
+    path: "{{ item.dir }}"
+    dest: "/tmp/{{ item.name }}"
+  loop: "{{ backups }}"
+  tags:
+    - backup
+
+- name: Create backup
+  ansible.builtin.fetch:
+    src: "/tmp/{{ item.name }}"
+    dest: "{{ backup_location }}/{{ item.name }}_{{ now(utc=true,fmt='%Y_%m_%d_%H-%M-%S') }}.tar"
+    flat: true
+  loop: "{{ backups }}"
+  tags:
+    - backup
+
+- name: Ensure service is restarted
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_location }}"
+    state: present
+  tags:
+    - backup
