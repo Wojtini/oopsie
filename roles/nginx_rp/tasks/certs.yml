@@ -25,6 +25,7 @@
     state: restarted
 
 - name: Create letsencrypt certificate
-  ansible.builtin.shell: letsencrypt certonly -n --webroot -w {{ letsencrypt_dir }} -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
+  ansible.builtin.shell: letsencrypt certonly -n --webroot -w {{ letsencrypt_dir }} -m {{ letsencrypt_email }} --agree-tos -d {{ item }}
   args:
-    creates: /etc/letsencrypt/live/{{ domain_name }}
+    creates: /etc/letsencrypt/live/{{ item }}
+  loop: "{{ domains }}"
