@@ -10,8 +10,8 @@
     path: "{{ item }}"
     state: absent
   loop:
-    - "{{ grafana_data_volumes_dir }}"
-    - "{{ grafana_config_host_data_dir }}"
+    - "{{ storage_data_volume }}"
+    - "{{ config_data_volume }}"
   tags:
     - restore
 
@@ -20,8 +20,8 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   loop:
-    - {src: "{{ storage_backup_tar }}", dest: "{{ grafana_volumes_dir }}"}
-    - {src: "{{ config_backup_tar }}", dest: "{{ grafana_config_host_dir }}"}
+    - {src: "{{ storage_backup_tar }}", dest: "{{ storage_volume }}"}
+    - {src: "{{ config_backup_tar }}", dest: "{{ config_volume }}"}
   tags:
     - restore
 
@@ -31,8 +31,8 @@
     owner: "472"
     recurse: true
   loop:
-    - "{{ grafana_data_volumes_dir }}"
-    - "{{ grafana_config_host_dir }}"
+    - "{{ storage_data_volume }}"
+    - "{{ config_volume }}"
   tags:
     - restore
 

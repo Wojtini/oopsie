@@ -8,13 +8,13 @@
 - name: Configure Datasources
   ansible.builtin.template:
     src: datasource.yml.j2
-    dest: "{{ grafana_datasources_dir }}/datasource.yml"
+    dest: "{{ config_datasources_dir }}/datasource.yml"
   tags:
     - configure
 
 - name: Set grafana domain
   lineinfile:
-    dest: "{{ grafana_config_host_data_dir }}/grafana.ini"
+    dest: "{{ config_data_volume }}/grafana.ini"
     regexp: ";domain ="
     line: ";domain = {{ grafana_domain }}"
   tags:
