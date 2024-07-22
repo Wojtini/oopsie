@@ -15,36 +15,4 @@ Vagrant.configure(2) do |config|
             vb.cpus = 4
         end
     end
-
-    config.vm.define "vagrant_owl" do |v|
-        v.vm.box = "ubuntu/focal64"
-        v.vm.hostname = "owl"
-        v.vm.network "public_network", bridge: "enp4s0"
-
-
-        v.vm.provision "shell",
-            run: "always",
-            inline: "ip route del default via 10.0.2.2"
-
-        v.vm.provider "virtualbox" do |vb|
-            vb.memory = 2048
-            vb.cpus = 1
-        end
-    end
-
-    config.vm.define "vagrant_staging" do |v|
-        v.vm.box = "ubuntu/focal64"
-        v.vm.hostname = "staging"
-        v.vm.network "public_network", bridge: "enp4s0"
-
-
-        v.vm.provision "shell",
-            run: "always",
-            inline: "ip route del default via 10.0.2.2"
-
-        v.vm.provider "virtualbox" do |vb|
-            vb.memory = 2048
-            vb.cpus = 1
-        end
-    end
 end
