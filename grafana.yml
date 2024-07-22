@@ -1,16 +1,12 @@
 #!/usr/bin/env ansible-playbook
 - name: Deploy grafana
-  hosts: grafana
+  hosts: wro_cat
 
   roles:
-    - role: grafana
+    - role: grafana_docker
       vars:
-        domain_name: grafana.50thfloor.xyz
+        grafana_domain: grafana.50thfloor.xyz
     - role: prometheus
-
-
-- name: Deploy exporter nodes
-  hosts: minecraft_servers
-
-  roles:
-    - role: node_exporter
+#      vars:
+#        config_backup_tar: "/home/wojtini/remote_backups/grafana_config_backup.tar_2024_07_22_12-24-03.tar"
+#        storage_backup_tar: "/home/wojtini/remote_backups/grafana_storage_backup.tar_2024_07_22_12-24-02.tar"

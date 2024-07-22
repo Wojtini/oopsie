@@ -1,3 +1,0 @@
-config_dir: /etc/grafana
-
-datasources_dir: "{{ config_dir }}/provisioning/datasources"
