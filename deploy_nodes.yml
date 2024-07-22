@@ -1,0 +1,6 @@
+#!/usr/bin/env ansible-playbook
+- name: Deploy nodes
+  hosts: all
+
+  roles:
+    - role: node_exporter

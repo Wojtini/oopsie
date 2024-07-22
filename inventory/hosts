@@ -1,14 +1,2 @@
 vagrant_cheetah ansible_port=2222
-vagrant_owl ansible_port=2200
-vagrant_staging ansible_port=2201
-
 wro_cat ansible_host=192.168.1.103 ansible_user=cat
-
-[minecraft_servers]
-vagrant_cheetah
-
-[grafana]
-vagrant_owl
-
-[nginx_rp]
-vagrant_owl
