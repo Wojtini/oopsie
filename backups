@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+
+current_date=$(date '+%Y-%m-%d')
+
+rsync --progress root@192.168.1.102:/home/vagrant/mc_server /home/wojtini/backups/mc_server_"$current_date" -avzPr
+
+rsync --progress root@192.168.1.103:/var/lib/docker/volumes/grafana_config /home/wojtini/backups/grafana_config"$current_date" -avzPr
+rsync --progress root@192.168.1.103:/var/lib/docker/volumes/grafana_storage /home/wojtini/backups/grafana_storage"$current_date" -avzPr
