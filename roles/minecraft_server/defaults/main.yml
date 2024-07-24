@@ -1,5 +1,4 @@
 server_jar_file: server.jar
 java_apt_package: openjdk-21-jdk
 
-minecraft_server_home: /home/vagrant/mc_server/
 server_settings: {}

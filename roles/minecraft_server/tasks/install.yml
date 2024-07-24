@@ -1,15 +1,21 @@
+- name: Create MC user
+  ansible.builtin.user:
+    name: "{{ user }}"
+    system: true
+
 - name: Install Java package (Ubuntu/Debian)
   ansible.builtin.apt:
     name: "{{ java_apt_package }}"
     state: present
     update_cache: true
-  when: ansible_os_family == 'Debian'
+  when: ansible_os_family == "Debian"
 
 - name: Copy server files to server dir
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: "{{ minecraft_server_home }}"
-    mode: '0644'
+    dest: "{{ minecraft_server_home }}/"
+    mode: "0644"
+    owner: "{{ user }}"
   loop:
     - "{{ server_jar_file }}"
     - "{{ eula_txt_file }}"
@@ -18,13 +24,15 @@
   ansible.builtin.template:
     src: entrypoint.sh.j2
     dest: "{{ minecraft_server_home }}/entrypoint.sh"
-    mode: '0744'
+    mode: "0744"
+    owner: "{{ user }}"
 
 - name: Create minecraft systemd service file
   ansible.builtin.template:
     src: templates/minecraft.service.j2
     dest: /lib/systemd/system/minecraft.service
-    mode: '0644'
+    mode: "0644"
+    owner: "{{ user }}"
 
 - name: Start minecraft service
   ansible.builtin.systemd:

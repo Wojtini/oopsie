@@ -1,1 +1,3 @@
 eula_txt_file: eula.txt
+user: mc_user
+minecraft_server_home: /home/{{ user }}/mc_server

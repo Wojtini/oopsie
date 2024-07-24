@@ -2,12 +2,14 @@
   ansible.builtin.template:
     src: "ops.json.j2"
     dest: "{{ minecraft_server_home }}/ops.json"
+    owner: "{{ user }}"
 
 - name: Copy server configuration file
   ansible.builtin.copy:
     src: "server.properties"
     dest: "{{ minecraft_server_home }}/"
     force: false
+    owner: "{{ user }}"
 
 - name: Configure server.properties
   server_properties:
@@ -26,5 +28,6 @@
   ansible.builtin.copy:
     src: plugins
     dest: "{{ minecraft_server_home }}"
+    owner: "{{ user }}"
   notify:
     - restart_mc_server
