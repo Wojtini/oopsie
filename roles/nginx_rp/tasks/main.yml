@@ -4,31 +4,11 @@
     apply:
       become: true
 
-#- name: Ensure that the existing certificate is still valid
-#  become: true
-#  ansible.builtin.command:
-#    argv:
-#      - "openssl"
-#      - "x509"
-#      - "-checkend"
-#      - "0"
-#      - "-noout"
-#      - "-in"
-#      - "/etc/letsencrypt/live/{{ domain_name }}/cert.pem"
-#  register: result
-#  changed_when: false
-#  ignore_errors: true
-
-#- name: Certificate status
-#  ansible.builtin.debug:
-#    var: result
-
-#- name: Generate certs
-#  ansible.builtin.include_tasks:
-#    file: certs.yml
-#    apply:
-#      become: true
-#  when: '"Certificate will not expire" not in result.stdout'
+- name: Generate certs
+  ansible.builtin.include_tasks:
+    file: certs.yml
+    apply:
+      become: true
 
 - name: Configure
   ansible.builtin.include_tasks:

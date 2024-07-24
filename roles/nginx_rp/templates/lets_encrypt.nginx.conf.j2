@@ -10,6 +10,6 @@ server {
     }
 
     location / {
-        rewrite ^ https://{{ item }}$request_uri? permanent;
+        rewrite ^ https://{{ domain_name }}$request_uri? permanent;
     }
 }

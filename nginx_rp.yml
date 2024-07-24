@@ -6,6 +6,7 @@
     - role: nginx_rp
       vars:
         letsencrypt_email: wmaziarzw@gmail.com
+        domain_name: 50thfloor.xyz
         domains:
           grafana: grafana.50thfloor.xyz
           radio: radio.50thfloor.xyz
