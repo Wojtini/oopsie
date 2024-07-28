@@ -1,0 +1,14 @@
+#!/usr/bin/env ansible-playbook
+- name: Install jenkins agents
+  hosts: wro_cat
+
+  roles:
+    - role: jenkins_slaves
+      vars:
+        nodes:
+          agent_wro_1:
+            image: wojtini397/50thagent:v1.1-beta
+            agent_name: agent_wro_1
+            port: 8024
+            workDir: /home/jenkins
+            secret: 13684e96ee25306695d479d15dc8e2204c5b2d6f9f3e807b6f862044ac7d8cbf

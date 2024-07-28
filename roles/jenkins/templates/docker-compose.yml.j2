@@ -1,0 +1,12 @@
+services:
+  jenkins_master:
+    image: {{ jenkins_image }}
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "{{ jenkins_port }}:{{ jenkins_port }}"
+      - "50000:50000"
+    volumes:
+      - data:{{ jenkins_home_dir }}
+volumes:
+  data: {}

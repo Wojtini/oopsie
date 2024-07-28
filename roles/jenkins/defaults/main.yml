@@ -1,0 +1,1 @@
+jenkins_image: jenkins/jenkins:lts-jdk17

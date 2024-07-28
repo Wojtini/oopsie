@@ -1,0 +1,17 @@
+- name: Ensures {{ compose_location }} dir exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ compose_location }}"
+    state: directory
+
+- name: Copy docker compose
+  become: true
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ compose_location }}/docker-compose.yml"
+
+- name: Create and start services
+  become: true
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_location }}"
+    state: present

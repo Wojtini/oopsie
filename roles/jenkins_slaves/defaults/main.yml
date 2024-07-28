@@ -1,0 +1,10 @@
+compose_location: /home/jenkins_slave
+jenkins_url: http://192.168.1.103:8080
+
+nodes:
+  agent_wro_1:
+    image: user/image:tag
+    agent_name: custom_name
+    port: 1111
+    workDir: /home/jenkins
+    secret: secret

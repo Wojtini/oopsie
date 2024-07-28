@@ -1,0 +1,12 @@
+services:
+  {{ item.key }}:
+    image: {{ item.value.image }}
+    container_name: {{ item.key }}
+    restart: unless-stopped
+    init: true
+    ports:
+      - "{{ item.value.port }}:22"
+    environment:
+        JENKINS_URL: {{ jenkins_url }}
+        AGENT_NAME: {{ item.value.agent_name }}
+        SECRET: {{ item.value.secret }}
