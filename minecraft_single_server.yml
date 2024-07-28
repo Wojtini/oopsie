@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 - name: Deploy minecraft server
-  hosts: vagrant_cheetah
+  hosts: wro_leopard
 
   roles:
     - role: minecraft_server

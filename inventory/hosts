@@ -1,2 +1,3 @@
 vagrant_cheetah ansible_port=2222
 wro_cat ansible_host=192.168.1.103 ansible_user=cat
+wro_leopard ansible_host=192.168.1.101 ansible_user=leopard
