@@ -7,7 +7,6 @@
       vars:
         letsencrypt_email: wmaziarzw@gmail.com
         domain_name: 50thfloor.xyz
-        domains:
+        subdomains:
           grafana: grafana.50thfloor.xyz
-          radio: radio.50thfloor.xyz
         grafana_upstream: 192.168.1.103:3000

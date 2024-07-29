@@ -1,6 +1,0 @@
-#!/usr/bin/env ansible-playbook
-- name: Install Jellyfin
-  hosts: wro_cat
-
-  roles:
-    - role: jellyfin

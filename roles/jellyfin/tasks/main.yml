@@ -1,7 +1,0 @@
-- name: Install
-  ansible.builtin.include_tasks:
-    file: install.yml
-    apply:
-      become: true
-  tags:
-    - install

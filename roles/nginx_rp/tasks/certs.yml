@@ -28,4 +28,4 @@
   ansible.builtin.shell: letsencrypt certonly -n --webroot -w {{ letsencrypt_dir }} -m {{ letsencrypt_email }} --agree-tos -d {{ item.value }}
   args:
     creates: /etc/letsencrypt/live/{{ item.value }}
-  loop: "{{ domains | dict2items }}"
+  loop: "{{ subdomains | dict2items }}"

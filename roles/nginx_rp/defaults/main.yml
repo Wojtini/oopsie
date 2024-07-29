@@ -1,4 +1,4 @@
 letsencrypt_email: name@mail.com
-domains: {}
+subdomains: {}
 
 grafana_upstream: localhost:3000
