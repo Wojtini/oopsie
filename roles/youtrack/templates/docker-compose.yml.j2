@@ -1,0 +1,17 @@
+services:
+  jellyfin:
+    image: jetbrains/youtrack:2024.2.38971
+    container_name: youtrack
+    volumes:
+      - data:/opt/youtrack/data
+      - conf:/opt/youtrack/conf
+      - logs:/opt/youtrack/logs
+      - backups:/opt/youtrack/backups
+    restart: 'unless-stopped'
+    ports:
+      - "8081:8080"
+volumes:
+  data: {}
+  conf: {}
+  logs: {}
+  backups: {}

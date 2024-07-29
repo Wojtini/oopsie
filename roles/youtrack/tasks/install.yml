@@ -1,0 +1,20 @@
+- name: Ensures {{ compose_location }} dir exists
+  ansible.builtin.file:
+    path: "{{ compose_location }}"
+    state: directory
+  tags:
+    - install
+
+- name: Copy docker compose
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ compose_location }}/docker-compose.yml"
+  tags:
+    - install
+
+- name: Create and start services
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_location }}"
+    state: present
+  tags:
+    - start
