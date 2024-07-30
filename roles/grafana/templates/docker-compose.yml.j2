@@ -1,6 +1,6 @@
 services:
   grafana:
-    image: grafana/grafana-enterprise:11.1.0-boringcrypto
+    image: {{ grafana_image }}
     container_name: grafana
     restart: unless-stopped
     ports:

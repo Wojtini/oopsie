@@ -3,11 +3,19 @@
   hosts: wro_cat
 
   roles:
-    - role: grafana_docker
+    - role: grafana
       vars:
-        grafana_domain: grafana.50thfloor.xyz
-#      vars:
-#        config_backup_tar: "/home/wojtini/remote_backups/grafana_config_backup.tar_2024_07_22_12-24-03.tar"
-#        storage_backup_tar: "/home/wojtini/remote_backups/grafana_storage_backup.tar_2024_07_22_12-24-02.tar"
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            url: http://192.168.1.103:9090
+            isDefault: true
+            access: proxy
+            editable: true
     - role: prometheus
+
+- name: Deploy nodes
+  hosts: all
+
+  roles:
     - role: node_exporter

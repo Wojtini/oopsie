@@ -1,3 +1,0 @@
-compose_location: /home/grafana
-grafana_port: 3000
-grafana_domain: localhost

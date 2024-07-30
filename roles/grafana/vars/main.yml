@@ -1,0 +1,8 @@
+grafana_storage_dir: /var/lib/grafana
+grafana_config_dir: /etc/grafana
+
+docker_volumes_dir: /var/lib/docker/volumes
+
+storage_data_volume: "{{ docker_volumes_dir }}/grafana_storage/_data"
+config_data_volume: "{{ docker_volumes_dir }}/grafana_config/_data"
+config_datasources_dir: "{{ config_data_volume }}/provisioning/datasources"

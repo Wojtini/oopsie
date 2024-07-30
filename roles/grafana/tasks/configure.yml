@@ -12,14 +12,6 @@
   tags:
     - configure
 
-- name: Set grafana domain
-  lineinfile:
-    dest: "{{ config_data_volume }}/grafana.ini"
-    regexp: ";domain ="
-    line: ";domain = {{ grafana_domain }}"
-  tags:
-    - configure
-
 - name: Ensure service is restarted
   community.docker.docker_compose_v2:
     project_src: "{{ compose_location }}"
