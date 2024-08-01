@@ -1,5 +1,5 @@
 .idea
 .vagrant
-roles/minecraft_server/files/server.jar
+Vagrantfile
 *.jar
 venv
