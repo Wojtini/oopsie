@@ -13,9 +13,3 @@
             access: proxy
             editable: true
     - role: prometheus
-
-- name: Deploy nodes
-  hosts: all
-
-  roles:
-    - role: node_exporter
