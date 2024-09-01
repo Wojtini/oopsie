@@ -5,6 +5,20 @@ Ansible's playbooks and roles for my own personal homelab.
 ## docker
 Install docker on target system. Used as dependency for other roles that uses docker to deploy services.
 
+## compose
+Compose role is for running docker-compose.yml files remotely on server. Configuration of those services are manual (or via restoring backups)
+
+### Jenkins
+CI/CD tool for internal and personal automation.
+Currently, it also creates backups for other systems.
+
+Port 50000 needs to be opened for inbound agents
+### Youtrack
+nothing to configure, its strictly to explore YouTrack
+
+### Youtrack
+local DNS sinkhole + simple A record for internal network
+
 ## nginx_rp
 Nginx is used as reverse proxy for exposed services.
 nginx.conf template should be manually modified in order to deploy new service.
@@ -60,23 +74,17 @@ no settings yet
 
 ### Variables
 ```
-### server jar file needs to be manually added for playbook to be copied
+### server jar file which will be copied from hosts machine
 server_jar_file: server.jar
 
 ### java, make sure it is compatible with provided jar file
 java_apt_package: openjdk-21-jdk
 
-### server_settings overwrite default server.properties values
+### server_settings to change server.properties values (missing values will not be modified)
 server_settings:
     motd: "A new motd"
 ```
 
-
-## Jenkins
-CI/CD tool for internal and personal automation.
-Currently, it also creates backups for other systems.
-
-Port 50000 needs to be opened for inbound agents
 ### Jenkins agents
 Deployment of inbound agents.
 Example:
@@ -92,8 +100,7 @@ nodes:
         ...
 ```
 In order to add a new agent, it needs to be created on jenkins first to get agent secret. 
+
 ## remote access aka ssh
 Role for mass public_key transfer for root user.
 
-### Youtrack
-nothing to configure, its strictly to explore YouTrack
