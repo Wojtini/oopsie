@@ -3,4 +3,8 @@
   hosts: wro_cat
 
   roles:
-    - role: youtrack
+    - role: compose
+      vars:
+        compose_location: /home/youtrack
+        compose_file: youtrack-docker-compose.yml.j2
+        youtrack_image: jetbrains/youtrack:2024.2.38971

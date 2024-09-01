@@ -1,0 +1,10 @@
+#!/usr/bin/env ansible-playbook
+- name: Install pihole
+  hosts: wro_cat
+
+  roles:
+    - role: compose
+      vars:
+        compose_location: /home/pihole
+        compose_file: pihole-docker-compose.yml.j2
+        pihole_image: pihole/pihole:latest

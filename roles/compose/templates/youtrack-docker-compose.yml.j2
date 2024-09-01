@@ -1,6 +1,6 @@
 services:
-  jellyfin:
-    image: jetbrains/youtrack:2024.2.38971
+  youtrack:
+    image: {{ youtrack_image }}
     container_name: youtrack
     volumes:
       - data:/opt/youtrack/data

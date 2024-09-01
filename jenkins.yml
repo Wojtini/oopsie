@@ -3,4 +3,8 @@
   hosts: wro_cat
 
   roles:
-    - role: jenkins
+    - role: compose
+      vars:
+        compose_location: /home/jenkins
+        compose_file: jenkins-docker-compose.yml.j2
+        jenkins_image: jenkins/jenkins:lts-jdk17

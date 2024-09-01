@@ -1,3 +1,0 @@
-jenkins_home_dir: /var/jenkins_home
-jenkins_port: 8080
-compose_location: /home/jenkins

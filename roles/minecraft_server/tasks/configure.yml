@@ -1,4 +1,4 @@
-- name: Copy ops template
+- name: Copy ops templates
   ansible.builtin.template:
     src: "ops.json.j2"
     dest: "{{ minecraft_server_home }}/ops.json"
