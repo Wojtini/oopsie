@@ -1,13 +1,20 @@
 #!/usr/bin/env ansible-playbook
-- name: Deploy nginx dns
-  hosts: wro_cat
+- name: Deploy nginx
+  hosts: cat
 
   roles:
     - role: nginx_rp
       vars:
-        letsencrypt_email: wmaziarzw@gmail.com
-        domain_name: 50thfloor.xyz
-        subdomains:
+        cert_location: /etc/mm_certs/
+        cert_file: server.crt
+        key_file: server.key
+        sites:
+          jenkins:
+            template: jenkins.nginx.conf.j2
+            server_name: jenkins.wro1.int.50thfloor.xyz
           grafana:
-            prefix: grafana.
-            upstream: 192.168.1.103:3000
+            template: grafana.nginx.conf.j2
+            server_name: grafana.wro1.int.50thfloor.xyz
+          youtrack:
+            template: youtrack.nginx.conf.j2
+            server_name: youtrack.wro1.int.50thfloor.xyz

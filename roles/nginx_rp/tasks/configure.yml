@@ -1,0 +1,30 @@
+- name: Ensures cert dir exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ cert_location }}"
+    state: directory
+
+- name: Copy CA and Key
+  become: true
+  ansible.builtin.file:
+    path: "{{ cert_location }}"
+    state: directory
+
+- name: Copy nginx config file
+  ansible.builtin.template:
+    src: "{{ item.value.template }}"
+    dest: /etc/nginx/sites-available/{{ item.key }}
+    force: true
+  loop: "{{ sites | dict2items  }}"
+
+- name: Enable configuration
+  ansible.builtin.file:
+    dest: /etc/nginx/sites-enabled/{{ item.key }}
+    src: /etc/nginx/sites-available/{{ item.key }}
+    state: link
+  loop: "{{ sites | dict2items  }}"
+
+- name: Restart nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted

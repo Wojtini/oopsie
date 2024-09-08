@@ -1,7 +1,0 @@
-letsencrypt_email: name@mail.com
-domain_name: test.xyz
-subdomains:
-  example:
-    prefix: example.
-    upstream: 192.168.1.2:8080
-

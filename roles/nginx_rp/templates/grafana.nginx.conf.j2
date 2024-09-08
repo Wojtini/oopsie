@@ -4,7 +4,7 @@ map $http_upgrade $connection_upgrade {
 }
 
 upstream grafana {
-  server {{ subdomains.grafana.upstream }};
+  server 192.168.1.103:3000;
 }
 
 server {
@@ -14,10 +14,10 @@ server {
     root /usr/share/nginx/html;
     index index.html index.htm;
 
-    server_name {{ subdomains.grafana.prefix }}{{ domain_name }};
+    server_name {{ item.value.server_name }};
 
-    ssl_certificate /etc/letsencrypt/live/{{ subdomains.grafana.prefix }}{{ domain_name }}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{{ subdomains.grafana.prefix }}{{ domain_name }}/privkey.pem;
+    ssl_certificate {{ cert_location }}{{ cert_file }};
+    ssl_certificate_key {{ cert_location }}{{ key_file }};
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 5m;
     ssl_protocols TLSv1.1 TLSv1.2;
@@ -31,7 +31,6 @@ server {
         proxy_pass http://grafana;
     }
 
-    # Proxy Grafana Live WebSocket connections.
     location /api/live/ {
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
