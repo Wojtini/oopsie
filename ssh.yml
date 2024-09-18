@@ -5,6 +5,6 @@
   roles:
     - role: remote_access
       vars:
+        user: wojtini
         ssh_keys:
           - /home/wojtini/.ssh/id_rsa.pub
-          - /home/wojtini/.ssh/vms_key.pub
