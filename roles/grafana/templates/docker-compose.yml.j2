@@ -3,6 +3,8 @@ services:
     image: {{ grafana_image }}
     container_name: grafana
     restart: unless-stopped
+    environment:
+      GF_SERVER_ROOT_URL: https://grafana.wro1.int.50thfloor.xyz
     ports:
       - "{{ grafana_port }}:{{ grafana_port }}"
     volumes:
