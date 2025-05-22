@@ -2,6 +2,7 @@
   delegate_to: localhost
   set_fact:
     deploy_dir: "{{ instances_dir }}/{{ instance_name }}"
+    source_dir: "{{ role_path }}/templates/{{ instance_config.project_dir }}"
 
 - name: Create dir
   file:
@@ -12,8 +13,9 @@
   delegate_to: localhost
   become: false
   find:
-    paths: "{{ role_path }}/templates/{{ instance_config.project_dir }}"
+    paths: "{{ source_dir }}"
     file_type: file
+    recurse: true
   register: all_files
 
 - name: Filter files
@@ -29,27 +31,44 @@
       normal: "{{ non_j2_files }}"
       j2: "{{ j2_files }}"
 
+- name: Ensure destination directories exist
+  file:
+    path: "{{ deploy_dir }}/{{ file.path | regex_replace('^' + source_dir + '/', '') | dirname }}"
+    state: directory
+    recurse: true
+  loop: "{{ all_files.files }}"
+  loop_control:
+    loop_var: file
+    label: "{{ file.path }}"
+
 - name: Template .j2 files
   template:
     src: "{{ template }}"
-    dest: "{{ deploy_dir }}/{{ template | basename | regex_replace('\\.j2$', '') }}"
+    dest: "{{ deploy_dir }}/{{ template | regex_replace('^' + source_dir + '/', '') | regex_replace('\\.j2$', '') }}"
     mode: '0644'
+  register: j2_render
   loop: "{{ j2_files }}"
   loop_control:
     loop_var: template
-#  notify: Restart docker
 
 - name: Copy non-template files
   copy:
     src: "{{ file }}"
-    dest: "{{ deploy_dir }}/{{ file | basename }}"
+    dest: "{{ deploy_dir }}/{{ file | regex_replace('^' + source_dir + '/', '') }}"
     mode: '0644'
+  register: non_j2_copy
   loop: "{{ non_j2_files }}"
   loop_control:
     loop_var: file
-#  notify: Restart docker
+
+- name: Check if any file changed
+  set_fact:
+    any_changed: "{{ (j2_render.results | selectattr('changed') | list) | length > 0 or (non_j2_copy.results | selectattr('changed') | list) | length > 0 }}"
 
 - name: Start docker compose
   community.docker.docker_compose_v2:
     project_src: "{{ deploy_dir }}"
     state: present
+    recreate: always
+    remove_orphans: true
+  when: any_changed

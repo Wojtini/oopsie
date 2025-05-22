@@ -6,5 +6,6 @@
     - instance
   vars:
     instances:
-      app2:
+      web-app-test:
         project_dir: hello-world-web-app
+        test_value: testownik
