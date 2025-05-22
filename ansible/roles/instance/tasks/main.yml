@@ -1,0 +1,14 @@
+- name: Install apps
+  include_tasks: install.yml
+  loop: "{{ instances | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  vars:
+    instance_name: "{{ item.key }}"
+    instance_config: "{{ item.value }}"
+
+- name: Cleanup removed apps
+  ansible.builtin.include_tasks:
+    file: cleanup.yml
+  tags:
+    - cleanup

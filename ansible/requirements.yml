@@ -1,0 +1,3 @@
+- src: git+https://github.com/hispanico/ansible-nginx-revproxy.git
+  version: master  # or whatever branch you want
+  name: nginx_revproxy

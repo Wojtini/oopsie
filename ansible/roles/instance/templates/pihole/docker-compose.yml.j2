@@ -1,0 +1,22 @@
+services:
+  pihole:
+    container_name: pihole
+    image: {{ instance_config.pihole_image }}
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8085:80/tcp"
+    environment:
+      TZ: 'Europe/Warsaw'
+      FTLCONF_webserver_api_password: {{ instance_config.pihole_password }}
+      FTLCONF_dns_listeningMode: 'all'
+    volumes:
+      - pihole:/etc/pihole
+      - dnsmasq:/etc/dnsmasq.d
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+volumes:
+  pihole: {}
+  dnsmasq: {}

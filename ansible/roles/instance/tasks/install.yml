@@ -1,0 +1,55 @@
+- name: Set deploy dir
+  delegate_to: localhost
+  set_fact:
+    deploy_dir: "{{ instances_dir }}/{{ instance_name }}"
+
+- name: Create dir
+  file:
+    path: "{{ deploy_dir }}" # yaml already prevent duplicates
+    state: directory
+
+- name: Get list of files in config dir
+  delegate_to: localhost
+  become: false
+  find:
+    paths: "{{ role_path }}/templates/{{ instance_config.project_dir }}"
+    file_type: file
+  register: all_files
+
+- name: Filter files
+  delegate_to: localhost
+  set_fact:
+    j2_files: "{{ all_files.files | selectattr('path', 'search', '\\.j2$') | map(attribute='path') | list }}"
+    non_j2_files: "{{ all_files.files | rejectattr('path', 'search', '\\.j2$') | map(attribute='path') | list }}"
+
+- name: Show value of a variable
+  delegate_to: localhost
+  debug:
+    msg:
+      normal: "{{ non_j2_files }}"
+      j2: "{{ j2_files }}"
+
+- name: Template .j2 files
+  template:
+    src: "{{ template }}"
+    dest: "{{ deploy_dir }}/{{ template | basename | regex_replace('\\.j2$', '') }}"
+    mode: '0644'
+  loop: "{{ j2_files }}"
+  loop_control:
+    loop_var: template
+#  notify: Restart docker
+
+- name: Copy non-template files
+  copy:
+    src: "{{ file }}"
+    dest: "{{ deploy_dir }}/{{ file | basename }}"
+    mode: '0644'
+  loop: "{{ non_j2_files }}"
+  loop_control:
+    loop_var: file
+#  notify: Restart docker
+
+- name: Start docker compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ deploy_dir }}"
+    state: present

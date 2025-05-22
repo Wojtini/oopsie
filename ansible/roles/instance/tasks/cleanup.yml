@@ -1,0 +1,21 @@
+- name: Find all apps
+  find:
+    paths: "{{ instances_dir }}"
+    file_type: directory
+    depth: 1
+  register: all_projects
+
+- name: Stop docker compose containers before removal
+  community.docker.docker_compose_v2:
+    project_src: "{{ item }}"
+    state: absent
+  loop: "{{ all_projects.files | map(attribute='path') | list }}"
+  when: (item | basename) not in instances.keys() | list
+  ignore_errors: true # dirty fix for early role testing
+
+- name: Cleanup apps
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ all_projects.files | map(attribute='path') | list }}"
+  when: (item | basename) not in instances.keys() | list

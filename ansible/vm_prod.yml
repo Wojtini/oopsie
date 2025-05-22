@@ -1,0 +1,14 @@
+#!/usr/bin/env ansible-playbook
+- name: Deploy containers
+  hosts: prod01
+  become: true
+  roles:
+    - instance
+  vars:
+    instances:
+      jellyfin:
+        project_dir: jellyfin
+      pihole:
+        project_dir: pihole
+        pihole_password:
+        pihole_image: pihole/pihole:latest

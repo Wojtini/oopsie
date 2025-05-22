@@ -1,0 +1,43 @@
+- name: Install deps
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - ca-certificates
+    - curl
+
+- name: Create keyring directory
+  become: true
+  ansible.builtin.file:
+    name: /etc/apt/keyrings/
+    state: directory
+    mode: "0755"
+
+- name: Add an Apt signing key
+  become: true
+  ansible.builtin.get_url:
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+    dest: /etc/apt/keyrings/docker.key
+    mode: "0644"
+
+- name: Add Docker apt repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/docker.key] https://download.docker.com/linux/ubuntu focal stable"
+    state: present
+    update_cache: true
+
+- name: Install Docker
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin

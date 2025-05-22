@@ -1,0 +1,10 @@
+#!/usr/bin/env ansible-playbook
+- name: Deploy containers
+  hosts: test01
+  become: true
+  roles:
+    - instance
+  vars:
+    instances:
+      app2:
+        project_dir: hello-world-web-app

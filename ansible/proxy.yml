@@ -1,0 +1,37 @@
+#!/usr/bin/env ansible-playbook
+- name: Setup Nginx
+  hosts: proxy01
+  become: true
+  roles:
+    - ansible-nginx-revproxy
+  vars:
+    nginx_revproxy_sites:
+      pihole:
+        domains:
+          - 50thfloor.xyz
+        upstreams:
+          - { backend_address: 10.10.10.115, backend_port: 8085 }
+        ssl: true
+        letsencrypt: true
+        letsencrypt_email: "wmaziarzw@gmail.com"
+      jellyfin:
+        domains:
+          - chill.50thfloor.xyz
+        upstreams:
+          - { backend_address: 10.10.10.115, backend_port: 8096 }
+        ssl: true
+        letsencrypt: true
+        letsencrypt_email: "wmaziarzw@gmail.com"
+        extra_locations:
+          socket:
+            conn_upgrade: true
+            upstreams:
+              - {backend_address: 10.10.10.115, backend_port: 8096}
+      helloworld:
+        domains:
+          - helloworld.50thfloor.xyz
+        upstreams:
+          - { backend_address: 10.10.10.122, backend_port: 8080 }
+        ssl: true
+        letsencrypt: true
+        letsencrypt_email: "wmaziarzw@gmail.com"
