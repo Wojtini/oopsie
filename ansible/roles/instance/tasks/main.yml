@@ -8,7 +8,8 @@
   include_tasks: install.yml
   loop: "{{ instances | dict2items }}"
   loop_control:
-    label: "{{ item.key }}"
+    label: "{{ app.key }}"
+    loop_var: app
   vars:
-    instance_name: "{{ item.key }}"
-    instance_config: "{{ item.value }}"
+    instance_name: "{{ app.key }}"
+    instance_config: "{{ app.value }}"

@@ -11,11 +11,6 @@
     combined_source_dirs: >-
       {{ [source_dir] + (instance_config.bonus | map('regex_replace', '^(.*)$', templates_dir ~ '/\1') | list) }}
 
-- name: Create dir
-  file:
-    path: "{{ deploy_dir }}"
-    state: directory
-
 - name: Initialize all found files list
   delegate_to: localhost
   become: false
@@ -32,48 +27,52 @@
   set_fact:
     all_files: "{{ all_files_arr.results | map(attribute='files') | sum(start=[]) }}"
 
-- name: Filter files
-  delegate_to: localhost
+- name: Map source files to flattened deploy paths (drop 1st subdir)
   set_fact:
-    j2_files: "{{ all_files | selectattr('path', 'search', '\\.j2$') | map(attribute='path') | list }}"
-    non_j2_files: "{{ all_files | rejectattr('path', 'search', '\\.j2$') | map(attribute='path') | list }}"
+    file_target_map: "{{ file_target_map | default({}) | combine({ file.path: deploy_dir + '/' + (file.path | regex_replace('^' ~ templates_dir ~ '/[^/]+/', '')) | regex_replace('\\.j2$', '') }) }}"
+  loop: "{{ all_files }}"
+  loop_control:
+    loop_var: file
+
+- name: Separate Jinja2 templates from static files
+  set_fact:
+    j2_files: "{{ file_target_map | dict2items | selectattr('key', 'search', '\\.j2$') | list }}"
+    static_files: "{{ file_target_map | dict2items | rejectattr('key', 'search', '\\.j2$') | list }}"
 
 - name: Show value of a variable
   delegate_to: localhost
   debug:
     msg:
-      normal: "{{ non_j2_files }}"
+      normal: "{{ static_files }}"
       j2: "{{ j2_files }}"
 
-- name: Ensure destination directories exist
+- name: Create dir
   file:
-    path: "{{ deploy_dir }}/{{ file.path | regex_replace('^' + source_dir + '/', '') | dirname }}"
+    path: "{{ deploy_dir }}"
     state: directory
-    recurse: true
-  loop: "{{ all_files }}"
-  loop_control:
-    loop_var: file
-    label: "{{ file.path }}"
 
-- name: Template .j2 files
+- name: Ensure target directories exist
+  file:
+    path: "{{ item.value | dirname }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ file_target_map | dict2items }}"
+
+- name: Render Jinja2 templates
   template:
-    src: "{{ template }}"
-    dest: "{{ deploy_dir }}/{{ template | regex_replace('^' + source_dir + '/', '') | regex_replace('\\.j2$', '') }}"
+    src: "{{ item.key }}"
+    dest: "{{ item.value }}"
     mode: '0644'
-  register: j2_render
   loop: "{{ j2_files }}"
-  loop_control:
-    loop_var: template
+  register: j2_render
 
-- name: Copy non-template files
+- name: Copy static files
   copy:
-    src: "{{ file }}"
-    dest: "{{ deploy_dir }}/{{ file | regex_replace('^' + source_dir + '/', '') }}"
+    src: "{{ item.key }}"
+    dest: "{{ item.value }}"
     mode: '0644'
+  loop: "{{ static_files }}"
   register: non_j2_copy
-  loop: "{{ non_j2_files }}"
-  loop_control:
-    loop_var: file
 
 - name: Check if any file changed
   set_fact:
