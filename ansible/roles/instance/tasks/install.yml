@@ -74,9 +74,48 @@
   loop: "{{ static_files }}"
   register: non_j2_copy
 
+- name: Find all files on the target deploy directory
+  find:
+    paths: "{{ deploy_dir }}"
+    file_type: file
+    recurse: yes
+  register: deployed_files
+
+- name: Set list of target files from mapping
+  set_fact:
+    mapped_targets: "{{ file_target_map.values() | list }}"
+
+- name: Determine files to delete (present on target but not in mapping)
+  set_fact:
+    files_to_delete: >-
+      {{
+        deployed_files.files
+        | map(attribute='path')
+        | reject('search', '/data/')
+        | difference(mapped_targets)
+      }}
+
+- name: Show value of a variable
+  delegate_to: localhost
+  debug:
+    msg:
+      files_to_delete: "{{ files_to_delete }}"
+
+- name: Delete files not in mapping
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ files_to_delete }}"
+  register: deleted_files
+
 - name: Check if any file changed
   set_fact:
-    any_changed: "{{ (j2_render.results | selectattr('changed') | list) | length > 0 or (non_j2_copy.results | selectattr('changed') | list) | length > 0 }}"
+    any_changed: >-
+      {{
+        (j2_render.results | selectattr('changed') | list | length > 0)
+        or (non_j2_copy.results | selectattr('changed') | list | length > 0)
+        or (deleted_files.results | selectattr('changed') | list | length > 0)
+      }}
 
 - name: Start docker compose
   community.docker.docker_compose_v2:

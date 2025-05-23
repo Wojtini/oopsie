@@ -9,6 +9,4 @@
       web-app-test:
         project_dir: hello-world-web-app
         test_value: testownik
-        bonus:
-          - prom_node
-        data_dirs:
+        bonus: []
