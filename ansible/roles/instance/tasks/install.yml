@@ -2,27 +2,41 @@
   delegate_to: localhost
   set_fact:
     deploy_dir: "{{ instances_dir }}/{{ instance_name }}"
+    templates_dir: "{{ role_path }}/templates"
     source_dir: "{{ role_path }}/templates/{{ instance_config.project_dir }}"
+
+- name: Combine source_dir with bonus files
+  delegate_to: localhost
+  set_fact:
+    combined_source_dirs: >-
+      {{ [source_dir] + (instance_config.bonus | map('regex_replace', '^(.*)$', templates_dir ~ '/\1') | list) }}
 
 - name: Create dir
   file:
-    path: "{{ deploy_dir }}" # yaml already prevent duplicates
+    path: "{{ deploy_dir }}"
     state: directory
 
-- name: Get list of files in config dir
+- name: Initialize all found files list
   delegate_to: localhost
   become: false
   find:
-    paths: "{{ source_dir }}"
+    paths: "{{ file }}"
     file_type: file
     recurse: true
-  register: all_files
+  register: all_files_arr
+  loop: "{{ combined_source_dirs }}"
+  loop_control:
+    loop_var: file
+
+- name: Combine all found files into one list
+  set_fact:
+    all_files: "{{ all_files_arr.results | map(attribute='files') | sum(start=[]) }}"
 
 - name: Filter files
   delegate_to: localhost
   set_fact:
-    j2_files: "{{ all_files.files | selectattr('path', 'search', '\\.j2$') | map(attribute='path') | list }}"
-    non_j2_files: "{{ all_files.files | rejectattr('path', 'search', '\\.j2$') | map(attribute='path') | list }}"
+    j2_files: "{{ all_files | selectattr('path', 'search', '\\.j2$') | map(attribute='path') | list }}"
+    non_j2_files: "{{ all_files | rejectattr('path', 'search', '\\.j2$') | map(attribute='path') | list }}"
 
 - name: Show value of a variable
   delegate_to: localhost
@@ -36,7 +50,7 @@
     path: "{{ deploy_dir }}/{{ file.path | regex_replace('^' + source_dir + '/', '') | dirname }}"
     state: directory
     recurse: true
-  loop: "{{ all_files.files }}"
+  loop: "{{ all_files }}"
   loop_control:
     loop_var: file
     label: "{{ file.path }}"
