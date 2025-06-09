@@ -1,0 +1,84 @@
+- name: Set deploy dir
+  delegate_to: localhost
+  set_fact:
+    deploy_dir: "{{ instances_dir }}/{{ instance_name }}"
+    templates_dir: "{{ role_path }}/templates"
+    source_dir: "{{ role_path }}/templates/{{ instance_name }}"
+
+- name: Process templates and static files
+  delegate_to: localhost
+  become: false
+  process_template_files:
+    projects: "{{ instance_config.projects }}"
+    templates_dir: "{{ playbook_dir }}/projects"
+    deploy_dir: "{{ deploy_dir }}"
+  register: result
+
+- name: Debug results
+  debug:
+    var: instance_config.projects
+
+- name: Render Jinja2 templates
+  template_masked:
+    src: "{{ item.key }}"
+    dest: "{{ item.value }}"
+    mode: '0644'
+    recurse: yes
+  loop: "{{ result.j2_files | dict2items }}"
+  register: j2_render
+
+- name: Copy static files
+  copy:
+    src: "{{ item.key }}"
+    dest: "{{ item.value }}"
+    mode: '0644'
+    recurse: yes
+  loop: "{{ result.static_files | dict2items }}"
+  register: non_j2_copy
+
+- name: Find all files on the target deploy directory
+  find:
+    paths: "{{ deploy_dir }}"
+    file_type: file
+    recurse: yes
+  register: deployed_files
+
+- name: Determine files to delete (present on target but not in mapping)
+  set_fact:
+    files_to_delete: >-
+      {{
+        deployed_files.files
+        | map(attribute='path')
+        | reject('search', '/data/')
+        | difference(result.file_target_map.values())
+      }}
+
+- name: Show value of a variable
+  delegate_to: localhost
+  debug:
+    msg:
+      files_to_delete: "{{ files_to_delete }}"
+
+- name: Delete files not in mapping
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ files_to_delete }}"
+  register: deleted_files
+
+- name: Check if any file changed
+  set_fact:
+    any_changed: >-
+      {{
+        (j2_render.results | selectattr('changed') | list | length > 0)
+        or (non_j2_copy.results | selectattr('changed') | list | length > 0)
+        or (deleted_files.results | selectattr('changed') | list | length > 0)
+      }}
+
+- name: Start docker compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ deploy_dir }}"
+    state: present
+    recreate: always
+    remove_orphans: true
+  when: any_changed
