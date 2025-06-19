@@ -114,3 +114,42 @@ resource "proxmox_vm_qemu" "test" {
   ciuser  = "ansible"
   sshkeys = file("~/.ssh/id_rsa.pub")
 }
+
+variable "vm_count" {
+  default = 4
+}
+
+resource "proxmox_vm_qemu" "kubernetes" {
+  count       = var.vm_count
+  name        = "kubernetes${count.index + 1}"
+  target_node = "50thfloor"
+
+  clone = "ubuntu-template"
+
+  cores  = 2
+  memory = 2048
+
+  disk {
+    size    = "100G"
+    type    = "scsi"
+    storage = "local-lvm"
+  }
+
+  network {
+    bridge    = "vmbr0"
+    model     = "virtio"
+    firewall  = true
+    macaddr   = "1E:11:1B:32:42:40"
+    link_down = false
+    mtu       = 0
+    queues    = 0
+    rate      = 0
+    tag       = -1
+  }
+
+  ipconfig0 = "ip=dhcp,ip6=dhcp"
+
+  ciuser  = "ansible"
+  sshkeys = file("~/.ssh/id_rsa.pub")
+}
+
