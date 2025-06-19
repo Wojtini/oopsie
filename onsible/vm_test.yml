@@ -7,8 +7,4 @@
   vars_files:
     - secrets/test.yml
   vars:
-    instances:
-      anotehr_app:
-        projects:
-          - aaa
-        hw_port: 8075
+    instances: {}

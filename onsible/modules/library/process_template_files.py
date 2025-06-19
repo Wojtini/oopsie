@@ -1,10 +1,7 @@
 #!/usr/bin/python
-import pydevd_pycharm
-
 from ansible.module_utils.basic import AnsibleModule
 import os
 import re
-import glob
 
 
 def flatten_path(path, templates_dir):
@@ -29,7 +26,6 @@ def main():
         templates_dir=dict(type='str', required=True),
         deploy_dir=dict(type='str', required=True)
     )
-    # pydevd_pycharm.settrace('localhost', port=1337, stdoutToServer=True, stderrToServer=True)
 
     module = AnsibleModule(argument_spec=module_args, supports_check_mode=True)
 

@@ -14,16 +14,22 @@
     deploy_dir: "{{ deploy_dir }}"
   register: result
 
-- name: Debug results
+- name: Show files
   debug:
-    var: instance_config.projects
+    var: result
+
+- name: Ensure parent directories exist for Jinja2 templates
+  file:
+    path: "{{ item.value | dirname }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ (result.j2_files | dict2items) + (result.static_files | dict2items) }}"
 
 - name: Render Jinja2 templates
   template_masked:
     src: "{{ item.key }}"
     dest: "{{ item.value }}"
     mode: '0644'
-    recurse: yes
   loop: "{{ result.j2_files | dict2items }}"
   register: j2_render
 
@@ -32,7 +38,6 @@
     src: "{{ item.key }}"
     dest: "{{ item.value }}"
     mode: '0644'
-    recurse: yes
   loop: "{{ result.static_files | dict2items }}"
   register: non_j2_copy
 

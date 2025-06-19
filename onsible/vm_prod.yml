@@ -6,9 +6,8 @@
     - instance
   vars:
     instances:
-      jellyfin:
-        project_dir: jellyfin
       pihole:
-        project_dir: pihole
-        pihole_password:
+        projects:
+          - pihole
         pihole_image: pihole/pihole:latest
+        pihole_password: mateusz
